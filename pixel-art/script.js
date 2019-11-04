@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    alert('Hola')
     let color = 'black';
     let herramienta = undefined;
 
@@ -11,18 +10,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function pushToolButton(boton) {
         if (herramienta == undefined) {
             herramienta = boton;
-            boton.style.backgroundColor = ("#ffcc66")
-        } else if (herramienta == tool) {
-            herramienta = undefined;
-            boton.style.backgroundColor = ("silver")
-        } else if (herramienta != undefined) {
+            changeColor(boton, '#ffcc66')
+
+        } else if (herramienta != boton) {
+            changeColor(boton, '#ffcc66')
+            changeColor(herramienta, 'silver')
             herramienta = boton;
-            herramienta.style.backgroundColor = ("#ffcc66")
-            console.log(herramienta);
-            
+
+        } else {
+            changeColor(boton, 'silver')
+            herramienta = undefined;
         }
     }
-
     let tool = document.getElementById("brush_button")
     tool.addEventListener('click', (event) => {
         pushToolButton(event.currentTarget)
@@ -49,6 +48,23 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     let tabla = document.getElementById("canvas_grid");
     tabla.addEventListener('click', (event) => {
-        changeColor(event.target, color)
+        if (event.target.tagName == "TD") {
+            if (herramienta.id == 'brush_button') {
+                changeColor(event.target, color)
+            } else if (herramienta.id == 'rubber_button') {
+                changeColor(event.target, '#FFFFFF')
+
+            } else if (herramienta.id == 'bucket_button') {
+                let celdas = Array.from(document.getElementsByClassName('canvas_cell'));
+                let filtro = celdas.filter(f => f.style.backgroundColor == event.target.style.backgroundColor)
+                filtro.forEach(f => changeColor(f, color))
+
+            } else if (herramienta.id == 'trash_button') {
+                let c = Array.from(document.getElementsByClassName('canvas_cell'))
+                c.forEach(c => changeColor(c, '#FFFFFF'))
+            } else if (herramienta.id == 'picker_button') {
+
+            }
+        }
     })
-});
+})
